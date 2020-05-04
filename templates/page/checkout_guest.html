@@ -1,0 +1,102 @@
+{% load static %}
+
+<div class="main">
+    <div class="container">
+        <div class="breadcrumbs">
+            <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a href="{% url 'show_cart' %}">Корзина</a></li>
+                <li > Оформление заказа</li>
+            </ul>
+        </div>
+
+    </div>
+    <section class="lk-profile">
+        <div class="container">
+            <div class="section-header"><h1>Оформление заказа</h1></div>
+            <div style="display: grid;grid-template-columns: 2fr 1fr; grid-gap: 30px" class="">
+                <div class="profile block-w-r4">
+                    <p class="text-bold mb-30">ЗАПОЛНЕНИЕ ВСЕХ ПОЛЕЙ ОБЯЗАТЕЛЬНО ДЛЯ ФОРМИРОВАНИЯ ЗАКАЗА.</p>
+                    <form class="lk-profile-form"  action="{% url 'checkout' %}" method="post">{% csrf_token %}
+
+                        <div class="lk-profile-form-wrapper">
+                            <div class="lk-profile-form-block ">
+
+                                <label>Ваше имя <sup>*</sup></label>
+                                 <input  required="required" name="{{ form.name.name }}" type="text" class="form-control"  placeholder="Ваше имя" value="{% if not guest.name %}{% else %}{{ guest.name }}{% endif %}">
+                                <label>Ваша фамилия <sup>*</sup></label>
+                                   <input  required="required" name="{{ form.family.name }}" type="text" class="form-control"  placeholder="Ваша фамилия" value="{% if not guest.family %}{% else %}{{ guest.family }}{% endif %}">
+                                <label>Ваша отчество <sup>*</sup></label>
+                                <input   name="{{ form.otchestvo.name }}" type="text" class="form-control"  placeholder="Ваше отчество" value="{% if not guest.otchestvo %}{% else %}{{ guest.otchestvo }}{% endif %}">
+                                <label>Ваш E-Mail  <sup>*</sup></label><span style="color: #f2486e;font-size: 13px;"
+                                                                                  id="checkout_email_error"></span>
+                                 <input id="checkout_email" onblur="checkout()"  type="email" required="required" name="{{ form.email.name }}" class="form-control"  placeholder="Ваш E-Mail" value="{% if not guest.email %}{% else %}{{ guest.email }}{% endif %}">
+                                <label>Ваш телефон  <sup>*</sup></label>
+                                 <input  type="tel" required="required" name="{{ form.phone.name }}" class="form-control"  placeholder="Ваш телефон" value="{% if not guest.phone %}{% else %}{{ guest.phone }}{% endif %}">
+
+
+                            </div>
+                            <div class="lk-profile-form-block">
+                                <label>Страна <sup>*</sup></label>
+                                 <input  type="text" required="required" name="{{ form.country.name }}" class="form-control"  placeholder="Страна" value="{% if not guest.country %}{% else %}{{ guest.country }}{% endif %}">
+                                <label>Город <sup>*</sup></label>
+                                 <input  type="text" required="required" name="{{ form.city.name }}" class="form-control"  placeholder="Город" value="{% if not guest.city %}{% else %}{{ guest.city }}{% endif %}">
+                                <label>Индекс <sup>*</sup></label>
+                                <input  type="number" required="required" name="{{ form.post_code.name }}" class="form-control"  placeholder="Индекс" value="{% if not guest.post_code %}{% else %}{{ guest.post_code }}{% endif %}">
+                                <label>Адрес доставки <sup>*</sup></label>
+                                <textarea  required="required" name="{{ form.address.name }}" class="form-control" rows="5"  placeholder="Адрес доставки">{% if not guest.address %}{% else %}{{ guest.address }}{% endif %}</textarea>
+                            </div>
+                        </div>
+
+                        <label class="custom-checkbox mb-30"> Создать аккаунт на сайте ?
+                            <input  type="checkbox" name="with_register"  id="with_register" >
+                            <span class="checkmark"></span>
+                        </label>
+
+
+                        <p class="text-bold mb-30">СПОСОБ ДОСТАВКИ ТОВАРА</p>
+                        {% for ship in shipping %}
+                            <label class="custom-checkbox mb-30"> {{ ship.name }}
+                                <input type="radio" name="shipping"
+                                       id="optionsRadios{{ ship.id }}" value="{{ ship.id }}" required="required">
+                                <span class="checkmark"></span>
+                            </label>
+                        {% endfor %}
+                        <p class="text-bold mb-30">СПОСОБ ОПЛАТЫ ТОВАРА</p>
+                        {% for pay in payment %}
+                            <label class="custom-checkbox mb-30"> {{ pay.name }}
+                                <input type="radio" name="payment"
+                                       id="optionsRadios{{ pay.id }}{{ pay.id }}" value="{{ pay.id }}" required="required">
+                                <span class="checkmark"></span>
+                            </label>
+                        {% endfor %}
+                        <input type="hidden" name="form_type" value="checkout_guest">
+
+                        <button id="checkout_btn"   type="submit" class="btn  ">ОФОРМИТЬ ЗАКАЗ</button>
+
+
+                    </form>
+
+                </div>
+                <div style="margin-top: 0" class="cart-total block-w-r4">
+                    <div class="cart-total__row">
+                        <p class="cart-total__name">Общая стоимость:</p><p class="cart-total__value">[[cartTotal]]Р</p>
+                    </div>
+                    <div class="cart-total__row">
+                        <p class="cart-total__name">Скидка:</p><p class="cart-total__value">[[promoDiscount]] %</p>
+                    </div>
+                    <div class="cart-total__row mb-40">
+                        <p  class="cart-total__name total">ИТОГО:</p>
+                        <p v-if="cartTotalWithDiscount > 0" class="cart-total__value total">[[ cartTotalWithDiscount]]Р</p>
+                        <p v-else="cartTotalWithDiscount" class="cart-total__value total">[[ cartTotal]]Р</p>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</div>
+

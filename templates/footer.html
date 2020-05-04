@@ -1,0 +1,151 @@
+{% load static %}
+<footer class="footer">
+    <div class="container">
+        <div class="footer-top d-flex-center-between">
+            <div class="footer-top__logo">
+                <img src="{% static 'images/logo.png' %}" alt="">
+                <p>Интернет-магазин по продаже Фэн-Шуй товаров</p>
+            </div>
+            <div class="footer-top__menu">
+                <p class="text-bold mb-40">КАТАЛОГ ТОВАРОВ</p>
+                <ul>
+                    <li><a href="">Фэн-Шуй</a></li>
+                    <li><a href="">Для интерьера</a></li>
+                    <li><a href="">Настольные игры</a></li>
+                    <li><a href="">Подарки и сувениры</a></li>
+                    <li><a href="">Магия и эзотерика</a></li>
+                    <li><a href="">Товары по акции</a></li>
+                    <li><a href="">Новинки</a></li>
+
+                </ul>
+            </div>
+            <div class="footer-top__menu">
+                <p class="text-bold mb-40">МЕНЮ</p>
+                <ul>
+                    <li><a href="">Главная</a></li>
+                    <li><a href="">Акции</a></li>
+                    <li><a href="">Новинки</a></li>
+                    <li><a href="">О нас</a></li>
+                    <li><a href="">Доставка</a></li>
+                    <li><a href="">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="footer-top__contact">
+                <p class="text-bold mb-40">КОНТАКТЫ</p>
+                <div class="header-top-left__icons-bottom mb-30">
+                    <a href="mailto:info@lakshmi.ru">info@lakshmi.ru</a>
+                </div>
+                <p class="text-bold">+7 (495) 926-33-59</p>
+                <p class="text-bold mb-20">+7 (964) 647-76-76</p>
+                <div class="header-top-left__icons-top">
+                    <a href="#"><img src="{% static 'images/fb.png' %}" alt=""></a>
+                    <a href="#"><img src="{% static 'images/vk.png' %}" alt=""></a>
+                    <a href="#"><img src="{% static 'images/inst.png' %}" alt=""></a>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2006-2020 Интернет-магазин “Лакшми”. Все права защищены</p>
+        </div>
+    </div>
+
+    <div v-bind:class="{ modalActive: loginModal }" class="modal">
+        <div class="modal-dialog buy-modal" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p>Вход</p>
+                </div>
+                <div class="modal-body">
+
+                    <form onsubmit="return false;">
+                        <div class=" login-username">
+                            <div>
+                                  <input name="log" id="login-email"  required="required" class="form-control input" size="20"
+                                       placeholder="Адрес E-MAIL" type="email">
+                            </div>
+                        </div>
+                        <div class="form-group login-password">
+                            <div>
+                                <input name="Password" id="login-password"  required="required" class="form-control input" size="20"
+                                       placeholder="Пароль" type="password">
+                            </div>
+                        </div>
+                       <div   id="errorlogin" style="color: red; margin-bottom: 5px;"></div>
+                        <div>
+                            <div>
+                                <button class="btn "  type="submit"  onclick="login()">ВОЙТИ</button>
+                                <p>Забыли пароль?</p>
+                            </div>
+
+                        </div>
+                    </form>
+                    <div class="modal-body-bottom">
+                         <span class="btn btn-outline" v-on:click="openModal('reg')">СОЗДАТЬ АККАУНТ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <div v-bind:class="{ modalActive: registerModal }" class="modal ">
+        <div class="modal-dialog buy-modal" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p>Регистрация</p>
+                </div>
+                <div class="modal-body">
+                    <form onsubmit="return false;">
+                        <div class=" login-username">
+                            <div>
+                                 <div id="erroremail" style="color:red;margin-bottom: 5px;"> </div>
+                                    <input id="reg_email" class="form-control " size="20" required="required"   placeholder="Введите адрес E-MAIL" type="email">
+                            </div>
+                        </div>
+                           <div class=" login-username">
+                            <div>
+                                <input id="reg_name" class="form-control " size="20" required="required"  placeholder="Введите Ваше имя" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group login-password">
+                            <div>
+                                 <input id="reg_pass1" class="form-control " size="20"  required="required" placeholder="Введите пароль"
+                                       type="password">
+                            </div>
+                        </div>
+                          <div class="form-group login-password">
+                            <div>
+                                 <input id="reg_pass2"  class="form-control " size="20"  required="required"   placeholder="Повторите пароль"
+                                       type="password">
+                            </div>
+                        </div>
+                         <div id="errorpass" style="color:red;margin-bottom: 5px;"> </div>
+                        <div>
+                            <div>
+                                <div class="form-group login-password">
+                            <img id="reg_n1" data-n1="{{ num1 }}" style="pointer-events: none;" src="/static/images/capthca/{{ num1 }}.png">
+                            <img style="pointer-events: none;" src="/static/images/capthca/plus.png">
+                            <img id="reg_n2" data-n2="{{ num2 }}"style="pointer-events: none;" src="/static/images/capthca/{{ num2 }}.png">
+                            <img style="pointer-events: none;" src="/static/images/capthca/eqal.png">
+                            <input id="reg_answer" class="form-control" type="text"  placeholder="ответ" required="required">
+                            <div id="errorother" style="color:red;margin-bottom: 5px;"></div>
+                        </div>
+                                 <label class="custom-checkbox mb-30"> Я согласен с политикой обработки персональных данных
+                          <input type="checkbox" checked id="agree">
+                          <span class="checkmark"></span>
+                        </label>
+                                <button class="btn "  type="submit"  onclick="signup()">РЕГИСТРАЦИЯ</button>
+
+                            </div>
+
+                        </div>
+                    </form>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

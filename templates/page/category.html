@@ -1,0 +1,98 @@
+
+{% extends 'basic.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="main">
+        <div class="container">
+        <div class="breadcrumbs">
+            <ul>
+                <li><a href="#">Главная</a></li>
+
+                <li>Корзина</li>
+            </ul>
+        </div>
+
+    </div>
+    <section class="collections">
+        <div class="container">
+
+            <div class="collections-wrapper">
+                {% for subcat in subcats %}
+                <a href="{% url 'subcategory' subcat.name_slug %}">
+                    <div class="collections-item" style="background: url({{ subcat.image.url }}) center no-repeat; background-size: cover">
+                        <p class="text-bold">{{ subcat.name }}</p>
+                    </div>
+                </a>
+               {% endfor %}
+            </div>
+        </div>
+    </section>
+    <section class="about">
+        <div class="container">
+            <div class="about-wrapper block-w-r4 d-flex-center-between">
+                <img src="http://placehold.it/300" alt="">
+                <div class="about-inner">
+                    <p class="text-bold mb-10">Интернет-магазин</p>
+                    <h3 class="mb-30">Лакшми</h3>
+                    <p class="mb-30">Оптовый интернет-магазин фен-шуй товаров и сувениров «Лакшми» предлагает
+                        своим покупателям большой выбор товаров на любой вкус и бюджет. У нас можно
+                        заказать традиционные сувениры или оригинальные презенты. На сайте можно
+                        купить подарки оптом для реализации в своем магазине или для близких людей
+                        и коллег на Новый год, 8 Марта, День Победы и другие праздники. Решив купить
+                        сувениры оптом, с «Лакшми» вы сэкономите деньги и время на поиск, выбор
+                        и покупку презентов.
+                    </p>
+                    <a href="#" class="btn">ПОДРОБНЕЕ</a>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="index-catalog">
+        <div class="container">
+            <div class="section-header"><h4>Наш ассортимент</h4></div>
+            <div class="index-catalog-slider">
+                <div class="glide__track" data-glide-el="track">
+                    <div class="glide__slides">
+                          {% for category in main_category %}
+                              <div class="glide__slide index-catalog-slider__item block-w-r4" >
+                            <img class="mb-30" src="{{ category.get_icon }}" alt="">
+                            <p class="text-bold mb-20">{{ category.name }}</p>
+                            <p>{{ category.short_description }}</p>
+                        </div>
+
+                       {% endfor %}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script>
+        var glide = new Glide('.index-catalog-slider', {
+        type: 'carousel',
+        perView: 3,
+        focusAt: 'center',
+        breakpoints: {
+            800: {
+                perView: 2,
+                focusAt: 0,
+            },
+            480: {
+                perView: 1
+            }
+        }
+    })
+
+    glide.mount()
+    </script>
+{% endblock %}

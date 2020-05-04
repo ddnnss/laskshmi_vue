@@ -1,0 +1,63 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main">
+    <div class="container">
+        <div class="breadcrumbs">
+           <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a href="{% url 'account' %}">Личный кабинет</a></li>
+                <li>Избранное</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <section class="catalog">
+        <div class="container">
+
+                  <div class="section-header"><h1>Избранное</h1></div>
+                <div class="catalog-items">
+
+                    <div class="catalog-items__inner">
+                    {% for item in wish_list %}
+                         <div class="catalog-item block-w-r4">
+                            {% if item.item.is_new %}
+                            <span class="catalog-item__is-new">новинка</span>
+                            {% endif %}
+                            <span data-id="{{ item.item.id }}" style="cursor: pointer" class="catalog-item__in-fav  {% if item.item.id in wishlist_ids %} item-in-fav {% endif %} " @click="addInFav"></span>
+                            <a href="{% url 'item_page' item.item.name_slug %}" class="">
+                                <img class="catalog-item__image" src="{{ item.item.getfirstimage }}" alt="">
+                                <p class="catalog-item__article">АРТИКУЛ : {{ item.item.article }}</p>
+                                <p class="catalog-item__description">{{ item.item.name }}</p>
+                            </a>
+                            <div class="catalog-item-bottom ">
+                                <p class="catalog-item__price">{{ item.item.discount_value }}Р</p>
+                                <div class="catalog-item-bottom__in-cart">
+                                    <input class="form-control" type="number" value="1" onkeyup="document.getElementById('add_btn_{{ item.item.id }}').dataset.num = this.value">
+
+                                      <span id="add_btn_{{ item.item.id }}" data-id="{{ item.item.id }}" data-num="1" data-name="{{ item.item.name }}" data-price="{{ item.item.discount_value }}" data-image="{{ item.item.itemimage_set.first.image_small }}" @click="addItem"  ></span>
+
+
+
+                                </div>
+
+                            </div>
+
+                        </div><!--//catalog-item -->
+                     {% endfor %}
+                    </div>
+
+                </div>
+
+
+
+        </div>
+
+    </section>
+
+
+
+</div>
+{% endblock %}

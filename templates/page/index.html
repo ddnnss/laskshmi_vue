@@ -1,0 +1,135 @@
+
+{% extends 'basic.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="main">
+    <section class="offer">
+        <div class="container">
+            <div class="offer-wrapper">
+                <div class="offer-menu block-w-r4">
+                    <ul class="offer-menu__wrapper">
+                        {% for category in all_cat %}
+                         <li class="offer-menu__item"><img src="{{ category.get_icon }}" alt=""><a style="text-align: start;" class="offer-menu__link " href="{% url 'category' category.name_slug %}">{{ category.name }}</a></li>
+                       {% endfor %}
+                    </ul>
+                </div>
+                <div class="offer-banner block-w-r4">
+                    <h1>Фэн-Шуй товары</h1>
+                    <p>Фэн-Шуй товары для всех благ и внутренней гармонии!</p>
+                    <a class="btn" href="#">в каталог</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="features">
+        <div class="container">
+            <div class="features-wrapper">
+                <div class="features-item">
+                    <img src="{% static 'images/product_feature_icon.png' %}" alt="">
+                    <p class="text-bold">ШИРОКИЙ АССОРТИМЕНТ</p>
+                </div>
+                <div class="features-item">
+                    <img src="{% static 'images/tag_feature_icon.png' %}" alt="">
+                    <p class="text-bold">ДОСТУПНЫЕ ЦЕНЫ</p>
+                </div>
+                <div class="features-item">
+                    <img src="{% static 'images/choice_feature_icon.png' %}" alt="">
+                    <p class="text-bold">УДОБСТВО ЗАКАЗА</p>
+                </div>
+                <div class="features-item">
+                    <img src="{% static 'images/box_feature_icon.png' %}" alt="">
+                    <p class="text-bold">ДОСТАВКА ПО ВСЕЙ РОССИИ</p>
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+    <section class="collections">
+        <div class="container">
+            <div class="section-header">
+                <h4 >Коллекции</h4>
+                <div class="hr"></div>
+            </div>
+            <div class="collections-wrapper">
+                            {% for  collection in collections %}
+  <a href="{% url 'collection' collection.name_slug %}">
+                    <div class="collections-item" style="background: url({{ collection.image.url }}) center no-repeat; background-size: cover">
+                        <p class="text-bold">{{ collection.name }}</p>
+                    </div>
+                </a>
+            {% endfor %}
+
+
+            </div>
+        </div>
+    </section>
+    <section class="about">
+        <div class="container">
+            <div class="about-wrapper block-w-r4 d-flex-center-between">
+                <img src="{% static 'images/turtle.png' %}" alt="">
+                <div class="about-inner">
+                    <p class="text-bold mb-10">Интернет-магазин</p>
+                    <h3 class="mb-30">Лакшми</h3>
+                    <p class="mb-30">Оптовый интернет-магазин фен-шуй товаров и сувениров «Лакшми» предлагает
+                        своим покупателям большой выбор товаров на любой вкус и бюджет. У нас можно
+                        заказать традиционные сувениры или оригинальные презенты. На сайте можно
+                        купить подарки оптом для реализации в своем магазине или для близких людей
+                        и коллег на Новый год, 8 Марта, День Победы и другие праздники. Решив купить
+                        сувениры оптом, с «Лакшми» вы сэкономите деньги и время на поиск, выбор
+                        и покупку презентов.
+                    </p>
+                    <a href="#" class="btn">ПОДРОБНЕЕ</a>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="index-catalog">
+        <div class="container">
+            <div class="section-header"><h4>Наш ассортимент</h4></div>
+            <div class="index-catalog-slider">
+                <div class="glide__track" data-glide-el="track">
+                    <div class="glide__slides">
+                          {% for category in all_cat %}
+                              <div class="glide__slide index-catalog-slider__item block-w-r4" >
+                            <img class="mb-30" src="{{ category.get_icon }}" alt="">
+                            <p class="text-bold mb-20">{{ category.name }}</p>
+                            <p>{{ category.short_description }}</p>
+                        </div>
+
+                       {% endfor %}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script>
+        var glide = new Glide('.index-catalog-slider', {
+        type: 'carousel',
+        perView: 3,
+        focusAt: 'center',
+        breakpoints: {
+            800: {
+                perView: 2,
+                focusAt: 0,
+            },
+            480: {
+                perView: 1
+            }
+        }
+    })
+
+    glide.mount()
+    </script>
+{% endblock %}

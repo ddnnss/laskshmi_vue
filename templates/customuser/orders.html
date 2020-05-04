@@ -1,0 +1,56 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="main">
+        <div class="container">
+            <div class="breadcrumbs">
+                <ul>
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="{% url 'account' %}">Личный кабинет</a></li>
+                    <li>Мои заказы</li>
+                </ul>
+            </div>
+
+        </div>
+        <section class="lk-orders">
+            <div class="container">
+                <div class="section-header"><h1>Мои заказы</h1></div>
+                <div class="cart-items">
+                    <div class="cart-items__item cart-grid block-w-r4">
+                        <p class="cart-items__item-name lk-order text-bold cart-header">№ ЗАКАЗА</p>
+                        <p class="cart-items__item-name lk-order text-bold cart-header">ID ЗАКАЗА</p>
+                        <p class="cart-items__item-price text-bold cart-header">СУММА</p>
+                        <p class="cart-items__item-total text-bold cart-header">ДАТА</p>
+                        <p class="cart-items__item-action text-bold cart-header">СТАТУС</p>
+                        <p class="cart-items__item-action text-bold cart-header"></p>
+                    </div>
+                    {% for order in orders %}
+                      <div class="cart-items__item block-w-r4 cart-grid">
+                                        <div class="cart-items__item-name lk-order">
+                                            № {{ order.id }}
+                                        </div>
+                                        <div class="cart-items__item-name lk-order">
+                                            ID:{{ order.order_code }}
+                                        </div>
+                                        <div class="cart-items__item-price ">{% if order.total_price_with_code %}
+                                            {{ order.total_price_with_code }}Р
+                                        {% else %}
+                                            {{ order.total_price }}Р
+                                        {% endif %}</div>
+                                        <div class="cart-items__item-total ">{{ order.created_at|date:"d M Y" }}</div>
+                                        <div class="cart-items__item-action  ">{% if order.status %}{{ order.status.name }}{% else %}Обработка{% endif %}</div>
+                                        <div class="cart-items__item-action "><a href=""><img src="images/lk-order-icon.png" alt=""></a></div>
+                                    </div>
+                    {% endfor %}
+
+
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+{% endblock %}

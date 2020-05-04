@@ -1,0 +1,433 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="{%  static 'css/glide.core.css' %}">
+    <link rel="stylesheet" href="{%  static 'css/glide.theme.css' %}">
+    <link rel="stylesheet" href="{%  static 'css/main.css' %}">
+    <style>
+        .cart-items__item-qt p{
+            user-select: none;
+            cursor: pointer;
+            transition: .2s linear;
+            font-size: 16px;
+        }
+        .cart-items__item-qt p:hover{
+            transform: scale(1.5);
+            transition: .2s linear;
+
+        }
+
+        figure.zoom {
+            background-position: 50% 50%;
+            position: relative;
+            {#width: 500px;#}
+            overflow: hidden;
+            cursor: zoom-in;
+        }
+        figure.zoom img:hover {
+            opacity: 0;
+        }
+        figure.zoom img {
+            transition: opacity .5s;
+            display: block;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <form id="dummy_form" class="not-visible">{% csrf_token %}</form>
+    {% include 'header.html' %}
+    {% block content %}
+    {% endblock %}
+    {% include 'footer.html' %}
+</div>
+{% block js %}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-1.10.1.min.js'%}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="{% static 'js/glide.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        let mobile_button = document.getElementsByClassName('mobile-toggle')[0]
+        let mobile_menu = document.getElementsByClassName('mobile-menu')[0]
+
+        mobile_button.onclick = function () {
+            this.classList.toggle('mobile-toggle-active')
+            mobile_menu.classList.toggle('menu-active')
+        }
+
+        function checkout(){
+            email_input =$('#checkout_email');
+            span_error = $('#checkout_email_error');
+            email =email_input.val();
+            email_input.attr('disabled','disabled');
+            csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+            $.ajax({
+                type:"POST",
+                url:'/check_email/',
+                data:{
+                    'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                    'email':email,
+                },
+                success : function(data){
+                    console.log('OK');
+                    console.log(data);
+                    if(data['result']){
+                        console.log('OK');
+                        email_input.css('border-color','#29902a');
+                        email_input.removeAttr('disabled');
+                        span_error.html('');
+                        $('#checkout_btn').removeAttr('disabled');
+
+                    }
+                    else{
+
+                        email_input.css('border-color','#f2486e');
+                        email_input.removeAttr('disabled');
+                        $('#checkout_btn').attr('disabled','disabled');
+                        span_error.html(data.email_error);
+
+                    }
+                }
+            });
+        }
+
+        var last_filter = '';
+        var last_order = '';
+        var last_search = '';
+        function setGetParam(key,value) {
+            if (history.pushState) {
+                var params = new URLSearchParams(window.location.search);
+                params.set(key, value);
+                var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + params.toString();
+
+                window.history.pushState({path:newUrl},'',newUrl);
+            }
+        }
+
+        function removeParam(parameter)
+        {
+            var url=document.location.href;
+            var urlparts= url.split('?');
+
+            if (urlparts.length>=2)
+            {
+                var urlBase=urlparts.shift();
+                var queryString=urlparts.join("?");
+
+                var prefix = encodeURIComponent(parameter)+'=';
+                var pars = queryString.split(/[&;]/g);
+                for (var i= pars.length; i-->0;)
+                    if (pars[i].lastIndexOf(prefix, 0)!==-1)
+                        pars.splice(i, 1);
+                url = urlBase+'?'+pars.join('&');
+                window.history.pushState('',document.title,url); // added this line to push the new url directly to url bar .
+
+            }
+            return url;
+        }
+
+        function filter(filter,subcat) {
+
+            console.log(filter,subcat);
+            if (last_filter == filter){
+                console.log('filter used');
+            }
+            else{
+                if ($('#search_string').val()){
+                    console.log('search not empty');
+                }
+                else {
+                    console.log('search empty');
+                    removeParam("search");
+
+                }
+                setGetParam('filter',filter);
+                last_filter = filter;
+
+                // var data = {};
+
+                var url =location.href.split('?')[1];
+
+                window.location.href = '?'+url;
+                // console.log(data);
+                // $.ajax({
+                //     url:url,
+                //     type:'GET',
+                //     data: data,
+                //     cache:true,
+                //     success: function (data) {
+                //         console.log('OK');
+                //
+                //     },
+                //     error: function () {
+                //         console.log('ERROR')
+                //     }
+                // })
+
+            }
+
+        }
+
+        function order(order,subcat) {
+            if (last_order == order){
+                console.log('order used');
+            }
+            else{
+                if ($('#search_string').val()){
+                    console.log('search not empty');
+                }
+                else {
+                    console.log('search empty');
+                    removeParam("search");
+
+                }
+
+                console.log(order,subcat);
+                setGetParam('order',order);
+                last_order = order;
+                var url =location.href.split('?')[1];
+
+                window.location.href = '?'+url;
+                // var data = {};
+
+                //var url ='/cart/sort_filter?subcat='+subcat+'&'+ location.href.split('?')[1];
+                // console.log(data);
+                // $.ajax({
+                //     url:url,
+                //     type:'GET',
+                //     data: data,
+                //     cache:true,
+                //     success: function (data) {
+                //         console.log('OK');
+                //
+                //         $('#subcat_items').html('');
+                //
+                //
+                //
+                //     },
+                //     error: function () {
+                //         console.log('ERROR')
+                //     }
+                // })
+
+            }
+
+
+
+
+        }
+
+        function search(subcat) {
+            var search_string = $('#search_string').val();
+
+            if (last_search == search_string){
+                console.log('search used');
+            }
+            else{
+                console.log(search_string,subcat);
+                setGetParam('search',search_string);
+                last_search=search_string;
+                var url =location.href.split('?')[1];
+
+                window.location.href = '?'+url;
+                // var data = {};
+
+                // var url ='/cart/sort_filter?subcat='+subcat+'&'+ location.href.split('?')[1];
+                // console.log(data);
+                // $.ajax({
+                //     url:url,
+                //     type:'GET',
+                //     data: data,
+                //     cache:true,
+                //     success: function (data) {
+                //         console.log('OK');
+                //
+                //     },
+                //     error: function () {
+                //         console.log('ERROR')
+                //     }
+                // })
+
+            }
+
+        }
+
+        function del_filter() {
+            removeParam("filter");
+            window.location.reload();
+
+        }
+
+        function checkout_form_change() {
+            $('#checkout_user_info_btn').css('margin-bottom','20px');
+
+            $('#checkout_user_info_btn').css('display','block');
+
+            $('#checkout_btn').attr('disabled','disabled');
+            $('#checkout_btn').html('ВЫ ИЗМЕНИЛИ ПЕРСОНАЛЬНЫЕ ДАННЫЕ, ИХ НЕОБХОДИМО СОХРАНИТЬ');
+
+        }
+
+        function per_page(subcat) {
+            var count = $( "#per_page option:selected" ).val();
+            console.log(count);
+
+            if (last_search == search_string){
+                console.log('search used');
+            }
+            else{
+                if ($('#search_string').val()){
+                    console.log('search not empty');
+                }
+                else {
+                    console.log('search empty');
+                    removeParam("search");
+
+                }
+                setGetParam('count',count);
+                var url =location.href.split('?')[1];
+
+                window.location.href = '?'+url;
+                // var data = {};
+
+                // var url ='/cart/sort_filter?subcat='+subcat+'&'+ location.href.split('?')[1];
+                // console.log(data);
+                // $.ajax({
+                //     url:url,
+                //     type:'GET',
+                //     data: data,
+                //     cache:true,
+                //     success: function (data) {
+                //         console.log('OK');
+                //
+                //     },
+                //     error: function () {
+                //         console.log('ERROR')
+                //     }
+                // })
+
+            }
+
+        }
+        function login(){
+            email = document.getElementById("login-email").value;
+            password = document.getElementById("login-password").value;
+            csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+            $("#errorlogin").html("");
+            $.ajax({
+                type:"POST",
+                url:'/user/log_in/',
+                data:{
+                    'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                    'email':email,
+                    'password':password,
+                },
+                success : function(data){
+                    console.log(data);
+                    if(data['result'] == "success"){
+                        location.reload();
+                    }
+                    else if(data['result'] == "inactive"){
+                        $("#errorlogin").html("Please verify this E-mail address.");
+                    }
+                    else{
+                        $("#errorlogin").html("Проверьте введеные данные!");
+                    }
+                }
+            });
+        }
+
+        function signup(){
+            email = document.getElementById("reg_email").value;
+            user_name = document.getElementById("reg_name").value;
+            password1 = document.getElementById("reg_pass1").value;
+            password2 = document.getElementById("reg_pass2").value;
+            n1 = $('#reg_n1').data('n1');
+            n2 = $('#reg_n2').data('n2');
+            answer = $('#reg_answer').val();
+            csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+            $("#erroremail").html("");
+            $("#errorpass").html("");
+            $.ajax({
+                type:"POST",
+                url:'/user/signup/',
+                data:{
+                    'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                    'email':email,
+                    'name':user_name,
+                    'password1':password1,
+                    'password2':password2,
+                    'n1':n1,
+                    'n2':n2,
+                    'answer':answer,
+                },
+                success : function(data){
+                    console.log(data['result']);
+                    if (data['result'] == "bad"){
+                        $("#errorother").html("Неверный ответ");
+                        return;
+                    }
+                    if(data['result'] == "success"){
+                        // $('#reg_text1').css('display','none');
+                        // $('#reg_text2').css('display','block');
+                        //location.reload();
+                        window.location.href = ('/user/account/edit');
+                    }
+                    else{
+                        if("email" in data['result'])
+                            $("#erroremail").html(data['result']['email'][0]);
+                        if("password2" in data['result'])
+                            $("#errorpass").html(data['result']['password2'][0]);
+                    }
+                }
+            })
+        }
+    </script>
+
+
+
+    <script>
+
+        function getCart() {
+            let csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0].value
+            let body = {}
+            fetch(`/cart/get_cart/`, {
+                method: 'post',
+                body: JSON.stringify(body),
+                headers: { "X-CSRFToken": csrfmiddlewaretoken },
+                credentials: 'same-origin'
+            }).then(res=>res.json())
+                .then(res => {
+
+                    if (res){
+                        console.log(res)
+                        app.headerCartItems=[]
+                        for (let x of res){
+
+                            console.log(x)
+                            app.headerCartItems.push(x)
+                        }
+                        console.log(app.headerCartItems)
+                    }
+                    if ({{ promo_discount_value }}){
+                        app.promoDiscount = {{ promo_discount_value }}
+                    }
+                })
+        }
+        getCart()
+
+    </script>
+
+{% endblock %}
+
+
+</body>
+
+</html>

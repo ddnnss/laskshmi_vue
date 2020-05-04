@@ -1,0 +1,65 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main">
+    <div class="container">
+        <div class="breadcrumbs">
+            <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a href="{% url 'account' %}">Личный кабинет</a></li>
+                <li>Личные данные</li>
+            </ul>
+        </div>
+
+    </div>
+    <section class="lk-profile">
+        <div class="container">
+            <div class="section-header"><h1>Личные данные</h1></div>
+            <div class="profile block-w-r4">
+                <p class="text-bold mb-30">ЗАПОЛНЕНИЕ ВСЕХ ПОЛЕЙ ОБЯЗАТЕЛЬНО ДЛЯ ФОРМИРОВАНИЯ ЗАКАЗА.</p>
+{{ form.errors }}
+
+                 <form class="lk-profile-form" action="{% url 'account_edit' %}" method="post">{% csrf_token %}
+                    <div class="lk-profile-form-wrapper">
+                        <div class="lk-profile-form-block ">
+
+                            <label>Ваше имя <sup>*</sup></label>
+                            <input required="required" name="{{ form.name.name }}" type="text" class="form-control"  placeholder="Ваше имя" value="{% if not client.name %}{% else %}{{ client.name }}{% endif %}">
+                            <label>Ваша фамилия <sup>*</sup></label>
+                            <input required="required" name="{{ form.family.name }}" type="text" class="form-control"  placeholder="Ваша фамилия" value="{% if not client.family %}{% else %}{{ client.family }}{% endif %}">
+                             <label>Ваша отчество <sup>*</sup></label>
+                            <input  name="{{ form.otchestvo.name }}" type="text" class="form-control"  placeholder="Ваше отчество" value="{% if not client.otchestvo %}{% else %}{{ client.otchestvo }}{% endif %}">
+                             <label>Ваш E-Mail  <sup>*</sup></label>
+                             <input type="email" required="required" name="{{ form.email.name }}" class="form-control"  placeholder="Ваш E-Mail" value="{{ client.email }}">
+                             <label>Ваш телефон  <sup>*</sup></label>
+                            <input type="tel" required="required" name="{{ form.phone.name }}" class="form-control"  placeholder="Ваш телефон" value="{% if not client.phone %}{% else %}{{ client.phone }}{% endif %}">
+
+
+                        </div>
+                        <div class="lk-profile-form-block">
+                            <label>Страна <sup>*</sup></label>
+                            <input type="tel" required="required" name="{{ form.country.name }}" class="form-control"  placeholder="Страна" value="{% if not client.country %}{% else %}{{ client.country }}{% endif %}">
+                              <label>Город <sup>*</sup></label>
+                            <input type="tel" required="required" name="{{ form.city.name }}" class="form-control"  placeholder="Город" value="{% if not client.city %}{% else %}{{ client.city }}{% endif %}">
+                              <label>Индекс <sup>*</sup></label>
+                            <input type="tel" required="required" name="{{ form.post_code.name }}" class="form-control"  placeholder="Индекс" value="{% if not client.post_code %}{% else %}{{ client.post_code }}{% endif %}">
+                              <label>Адрес доставки <sup>*</sup></label>
+                            <textarea required="required" name="{{ form.address.name }}" class="form-control" rows="5"  placeholder="Адрес доставки">{% if not client.address %}{% else %}{{ client.address }}{% endif %}</textarea>
+                        </div>
+                    </div>
+
+                     <label class="custom-checkbox mb-30"> Я хочу получать E-Mail рассылку с предложениями и скидками
+                           <input type="checkbox" {% if client.is_allow_email %}checked="checked"{% endif %}  name="{{ form.is_allow_email.name }}" id="is_allow_email" >
+                          <span class="checkmark"></span>
+                        </label>
+                      <button type="submit" class="btn ">Сохранить</button>
+
+                </form>
+
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock%}

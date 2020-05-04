@@ -1,0 +1,234 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="main">
+        <div class="container">
+            <div class="breadcrumbs">
+                <ul>
+                    <li><a href="/">ГЛАВНАЯ</a></li>
+                    <li><a href="{% url 'category' item.subcategory.category.name_slug %}">{{ item.subcategory.category.name.upper }}</a></li>
+                    <li><a href="{% url 'subcategory' item.subcategory.name_slug %}">{{ item.subcategory.name.upper }}</a></li>
+                    <li>{{ item.name.upper }}</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <section class="item">
+            <div class="container">
+                <div class="item-wrapper">
+                    <div class="item-images">
+                        <div class="item-images-lg">
+                            <div style="padding: 20px" class="item-images__main-image block-w-r4">
+                                <figure id="zoom_img_large" class="zoom" onmousemove="zoom(event)" style="background-image: url({{ item.itemimage_set.first.image }})">
+                                 <img id="zoom_img_small" src="{{ item.itemimage_set.first.image_small }}" />
+                                </figure>
+
+                            </div>
+                            <div class="item-images-preview">
+                                {% for image in item.itemimage_set.all %}
+                                    <div class="item-images-preview__item block-w-r4">
+                                        <img @click="changeImg" style="cursor: pointer" data-large="{{ image.image }}" data-small="{{ image.image_small }}"
+                                             src="{{ image.image_small }}" alt="{{ image.item.name }}"/>
+                                    </div>
+
+                                {% endfor %}
+
+
+                            </div>
+                        </div>
+
+                        <div class="item-images-slider ">
+                            <h4 class="text-bold">{{ item.name }}</h4>
+                            <div class="glide__track mb-10" data-glide-el="track">
+
+                                <div class="glide__slides">
+                                    {% for image in item.itemimage_set.all %}
+                                        <div class="slider__frame glide__slide">
+                                            <img data-large="{{ image.image }}"
+                                                 src="{{ image.image_small }}" alt="{{ image.item.name }}" title=""/>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                            </div>
+                            <div class="glide__bullets" data-glide-el="controls[nav]">
+                                <button class="glide__bullet" data-glide-dir="=0"></button>
+                                <button class="glide__bullet" data-glide-dir="=1"></button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="item-info block-w-r4">
+                        <h1>{{ item.name }}</h1>
+                        <p class="item-info__article">АРТИКУЛ : {{ item.article }}</p>
+                        <p class="item-info__price">{{ item.discount_value }}Р</p>
+                        <p class="item-info__description">{{ item.description|safe }}</p>
+                        <div class="item-info-buttons d-flex-center-between">
+                            {% if item.is_present %}
+                                <p class="item-info__item-present">В НАЛИЧИИ</p>
+                            {% endif %}
+                            <input class="form-control" type="number" value="1" onkeyup="document.getElementById('add_to_cart').dataset.num = this.value">
+                            <div class="item-info-buttons__wrapper ">
+
+                                <span id="add_to_cart" class="btn btn-in-cart" data-id="{{ item.id }}" data-num="1" data-name="{{ item.name }}" data-price="{{ item.discount_value }}" data-image="{{ item.itemimage_set.first.image_small }}" @click="addItem"  >В КОРЗИНУ</span>
+                                <span data-id="{{ item.id }}" class="btn btn-outline btn-in-fav" @click="addInFav">В ИЗБРАННОЕ</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="item-tabs">
+                    <div class="tab">
+                        <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'details')">ДЕТАЛИ</button>
+                        <button class="tablinks" onclick="openCity(event, 'delivery')">ДОСТАВКА</button>
+
+                    </div>
+
+                    <div id="details" class="tabcontent">
+                        <p class="item-info__description-sm">{{ item.description|safe }}</p>
+                        {% if item.width != 'не указано'  %} <p class="text-bold mb-10">Ширина: <span> {{ item.width }} мм.</span>  </p>{% endif %}
+                        {% if item.length != 'не указано'  %}  <p class="text-bold mb-10">Длина: <span> {{ item.length }} мм.</span>  </p>{% endif %}
+                        {% if item.height != 'не указано'  %} <p class="text-bold mb-10">Высота: <span> {{ item.height }} мм.</span>  </p>{% endif %}
+                        {% if item.material != 'не указано'  %}  <p class="text-bold mb-10">Материал: <span> {{ item.material }}</span>  </p>{% endif %}
+                        {% if item.weight != 'не указано'  %} <p class="text-bold">Вес: <span> {{ item.weight }} гр.</span>  </p>{% endif %}
+
+                    </div>
+
+                    <div  id="delivery" class="tabcontent">
+                        <div  class="tab-pane" id="shipping">
+                            <table style="margin-bottom: 20px">
+                                <colgroup>
+                                    <col style="width:33%">
+                                    <col style="width:33%">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <td>Самовывоз из офиса</td>
+                                    <td>бесплатно</td>
+                                </tr>
+                                <tr>
+                                    <td>Доставка до Транспортной Кампании</td>
+                                    <td>бесплатно*</td>
+                                </tr>
+                                <tr>
+                                    <td>Доставка по Москве (в пределах МКАД)</td>
+                                    <td>500 рублей</td>
+                                </tr>
+                                </tbody>
+
+
+
+                            </table>
+                            <a style="width: 250px" class=" btn btn-outline " href="{% url 'dostavka' %}" target="_blank">Подробнее про доставку</a>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+              <div class="section-header"><h3>Рекомендованные товары</h3></div>
+                    <div class="recomended-items-slider">
+                        <div class="glide__track" data-glide-el="track">
+                            <div class="glide__slides">
+                                {% for item in recomended %}
+                                <div class="glide__slide catalog-item block-w-r4">
+                                 <span data-id="{{ item.id }}" style="cursor: pointer" class="catalog-item__in-fav  {% if item.id in wishlist_ids %} item-in-fav {% endif %} " @click="addInFav"></span>
+                                    <a href="{% url 'item_page' item.name_slug %}" class="">
+                                        {% if item.is_new %}
+                                        <span class="catalog-item__is-new">новинка</span>
+                                    {% endif %}
+
+                                         <img class="catalog-item__image" src="{{ item.getfirstimage }}" alt="">
+                                        <p class="catalog-item__article">АРТИКУЛ : {{ item.article }}</p>
+                                        <p class="catalog-item__description">{{ item.name }}</p>
+                                    </a>
+                                    <div class="catalog-item-bottom ">
+                                      <p class="catalog-item__price">{{ item.discount_value }}Р</p>
+                                        <div class="catalog-item-bottom__in-cart">
+                                            <input class="form-control" type="number" value="1" onkeyup="document.getElementById('add_btn_{{ item.id }}').dataset.num = this.value">
+                                            <span id="add_btn_{{ item.id }}" data-id="{{ item.id }}" data-num="1" data-name="{{ item.name }}" data-price="{{ item.discount_value }}" data-image="{{ item.itemimage_set.first.image_small }}" @click="addItem"  ></span>
+                                        </div>
+                                    </div>
+                                </div>
+                               {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </section>
+
+
+
+    </div>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'js/glide.min.js' %}"></script>
+    <script>
+    function zoom(e){
+  var zoomer = e.currentTarget;
+  e.offsetX ? offsetX = e.offsetX : offsetX = e.touches[0].pageX
+  e.offsetY ? offsetY = e.offsetY : offsetX = e.touches[0].pageX
+  x = offsetX/zoomer.offsetWidth*100
+  y = offsetY/zoomer.offsetHeight*100
+  zoomer.style.backgroundPosition = x + '% ' + y + '%';
+}
+        var recomended = new Glide('.recomended-items-slider', {
+            type: 'carousel',
+            perView: 4,
+            focusAt: 0,
+            breakpoints: {
+                900: {
+                    perView: 3,
+                    focusAt: 0,
+                },
+                640: {
+                    perView: 2,
+                    focusAt: 0,
+                },
+                430: {
+                    perView: 1,
+
+                },
+
+            }
+        })
+
+        recomended.mount()
+
+        var images = new Glide('.item-images-slider', {
+            type: 'carousel',
+            perView: 1,
+            focusAt: 0,
+
+
+        })
+
+        images.mount()
+    </script>
+    <script>
+        function openCity(evt, cityName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        document.getElementById("defaultOpen").click();
+    </script>
+{% endblock %}
+

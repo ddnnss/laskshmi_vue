@@ -1,0 +1,73 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main">
+    <div class="container">
+        <div class="breadcrumbs">
+            <ul>
+                <li><a href="#">Главная</a></li>
+
+                <li>Доставка</li>
+            </ul>
+        </div>
+
+    </div>
+    <section class="contact">
+        <div class="container">
+            <div class="section-header"><h1>Информация о доставке</h1></div>
+            <div class="info-blocks">
+
+                <div class="info-blocks__item block-w-r4" >
+                    <img class="mb-30" src="images/yin-yang_icon.png" alt="">
+                    <p class="text-bold mb-20">САМОВЫВОЗ</p>
+                    <p class="mb-40">Вы можете забрать ваш заказ сами с нашего склада по адресу:<br>
+                        г. Москва, метро Нагорная, Электорлитный проезд, дом 10, склад 18</p>
+                    <p class="text-bold">Стоимость: бесплатно</p>
+                </div>
+                <div class="info-blocks__item block-w-r4">
+                    <img class="mb-30" src="images/yin-yang_icon.png" alt="">
+                    <p class="text-bold mb-20">ДОСТАВКА КУРЬЕРОМ</p>
+                    <p class="mb-40">Мы доставляем заказы курьером по Москве
+                        (в пределах МКАД). По поводу доставки
+                        за пределы МКАД - звоните по контактному номеру:
+                        +7 (495) 926 33 59</p>
+                    <p class="text-bold">Стоимость: 500 рублей</p>
+                </div>
+                <div class="info-blocks__item block-w-r4">
+                    <img class="mb-30" src="images/yin-yang_icon.png" alt="">
+                    <p class="text-bold mb-20">ДОСТАВКА ТРАНСПОРТНОЙ КОМПАНИЕЙ</p>
+                    <p class="mb-20">Мы отправляем грузы по всей территории РФ! Со списком ТК вы можете ознакомиться ниже.
+                        Стоимость доставки груза до вашего города уточняйте индивидуально у ТК!
+                        Ниже указана стоимость доставки груза до ТК</p>
+                    <p class="text-bold"> Стоимость: 500 рублей (при заказе от 5.000 - бесплатно)</p>
+                </div>
+
+            </div>
+            <div class="section-header">
+                <h4 >Список транспортных компаний</h4>
+                <div class="hr"></div>
+            </div>
+            <div class="block-w-r4">
+                <p class="text-bold">
+                    ТК "РАТЭК"<br>
+                    ТК «Мейджик Транс»<br>
+                    ТК «Байкал-Сервис»<br>
+                    ТК «ФАСТранс»<br>
+                    ТК «Экспресс-Авто»<br>
+                    ТК «ЖелДорЭкспедиция»<br>
+                    ТК «Деловые Линии»<br>
+                    ТК "Почтовая Экспедиционная Компания"<br>
+                    ТК "ПЭК"<br>
+                    СДЭК<br>
+                    ТК "Деливери"<br>
+                    ТК «КИТ»<br>
+                </p>
+
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}
+

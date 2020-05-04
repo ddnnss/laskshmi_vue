@@ -1,0 +1,108 @@
+{% load static %}
+<header class="header">
+    <div class="container">
+        <div class="header-top d-flex-center-between">
+            <div class="header-top-left d-flex-center-between">
+                <div class="mobile-menu-wrapper">
+                    <div class="mobile-toggle"></div>
+                </div>
+                <div class="header-top-left__logo">
+                    <a href="/"><img src="{% static 'images/logo.png' %}" alt=""></a>
+                </div>
+                <div class="header-top-left__icons">
+                    <div class="header-top-left__icons-top">
+                        <a href="#"><img src="{% static 'images/fb.png' %}" alt=""></a>
+                        <a href="#"><img src="{% static 'images/vk.png' %}" alt=""></a>
+                        <a href="#"><img src="{% static 'images/inst.png' %}" alt=""></a>
+                    </div>
+                    <div class="header-top-left__icons-bottom">
+                        <a href="mailto:info@lakshmi.ru">info@lakshmi.ru</a>
+                    </div>
+                </div>
+                <div class="header-top-left__phones">
+                    <div class="header-top-left__phones-inner">
+                        <p>+7 (495) 926-33-59</p>
+                        <p>+7 (964) 647-76-76</p>
+                    </div>
+                </div>
+            </div>
+            <div class="header-top-icons header-top-icons-md-hide  d-flex-center-between">
+                <span class="header-top-icons__search"></span>
+                {% if not request.user.is_authenticated %}
+                    <span v-on:click="openModal('log')" class="header-top-icons__login"></span>
+                    {% else %}
+                    <a href="{% url 'account' %}">
+                        <span style="transform: rotate(180deg)" class="header-top-icons__login"></span>
+                    </a>
+                {% endif %}
+            </div>
+            <div class="header-top-icons d-flex-center-between no-pseudo">
+                <span class="header-top-icons__phone"></span>
+                <span id="cart_items_count" :data-num="[[cartItemsNum ]]" v-on:mouseover="openHeaderCart" v-on:click="openHeaderCart" v-bind:class="{ empty: cartItemsNum===0 }"  class="header-top-icons__cart"></span>
+                <div v-if="cartTotal" v-bind:class="{ headerCartActive: headerCartOpen }" class="header-cart" v-on:mouseleave="headerCartMouseLeave">
+                    <div class="header-cart-inner">
+                         <header-cart-items
+                                    v-for="(item,index) in headerCartItems"
+                                    v-bind:item="item"
+                                    v-bind:key="item.id"
+                                    v-bind:index="index"
+                                    v-on:userdelete="remove"
+                            ></header-cart-items>
+                    </div>
+                    <div class="header-cart-bottom">
+                        <a href="{% url 'show_cart' %}" class="btn btn-outline">СМОТРЕТЬ КОРЗИНУ</a>
+                        <a href="{% url 'checkout' %}" class="btn">ОПЛАТА</a>
+                    </div>
+                </div>
+                <div v-else v-bind:class="{ headerCartActive: headerCartOpen }" class="header-cart" v-on:mouseleave="headerCartMouseLeave">
+                 <p>Корзина пуста</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="header-bottom ">
+        <div class="container">
+            <nav class="nav-wrapper">
+                <ul class="nav d-flex-center-between">
+                    <li style="cursor: pointer" class="nav-item nav-item__catalog " v-on:click="openMenu"> <span style="color: #ffffff" class="nav-item-link " >КАТАЛОГ ТОВАРОВ</span>
+                        {% if not indexActive %}
+                         <div v-bind:class="{ navCatalogMenuActive: menuOpen }" class="nav-catalog-menu  ">
+                            <div class="offer-menu block-w-r4">
+                                <ul class="offer-menu__wrapper ">
+                                  {% for category in all_cat %}
+                                     <li class="offer-menu__item"><img src="{{ category.get_icon }}" alt=""><a style="text-align: start;" class="offer-menu__link " href="{% url 'category' category.name_slug %}">{{ category.name }}</a></li>
+                                   {% endfor %} </ul>
+                            </div>
+                        </div>
+
+                        {% endif %}
+                    </li>
+                    <li class="nav-item"><a class="nav-item-link {{ indexActive }}" href="/">ГЛАВНАЯ</a></li>
+                    <li class="nav-item"><a class="nav-item-link {{ actionActive }}" href="{% url 'actions' %}">АКЦИИ</a></li>
+                    <li class="nav-item"><a class="nav-item-link {{ newActive }}" href="{% url 'new' %}">НОВИНКИ</a></li>
+                    <li class="nav-item"><a class="nav-item-link {{ aboutActive }}" href="{% url 'about_us' %}">О НАС</a></li>
+                    <li class="nav-item"><a class="nav-item-link {{ dostavkaActive }}" href="{% url 'dostavka' %}">ДОСТАВКА</a></li>
+                    <li class="nav-item"><a class="nav-item-link {{ contactsActive }}" href="{% url 'contacts' %}">КОНТАКТЫ</a></li>
+                </ul>
+            </nav>
+            <div class="header-bottom-search">
+                <form action="">
+                    <input type="text" class="form-control" placeholder="Я ищу...">
+                </form>
+            </div>
+            <div class="mobile-menu">
+                <ul class="">
+                    <li class="nav-item nav-item__catalog "><a class="nav-item-link " href="">КАТАЛОГ ТОВАРОВ</a></li>
+                    <li class="nav-item"><a class="nav-item-link" href="/">ГЛАВНАЯ</a></li>
+                    <li class="nav-item"><a class="nav-item-link" href="">АКЦИИ</a></li>
+                    <li class="nav-item"><a class="nav-item-link" href="">НОВИНКИ</a></li>
+                    <li class="nav-item"><a class="nav-item-link" href="">О НАС</a></li>
+                     <li class="nav-item"><a class="nav-item-link" href="{% url 'dostavka' %}">ДОСТАВКА</a></li>
+                    <li class="nav-item"><a class="nav-item-link" href="{% url 'contacts' %}">КОНТАКТЫ</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+
+

@@ -1,0 +1,48 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="main">
+    <div class="container">
+        <div class="breadcrumbs">
+            <ul>
+                <li><a href="/">Главная</a></li>
+
+                <li>Личный кабинет</li>
+            </ul>
+        </div>
+
+    </div>
+    <section class="lk">
+        <div class="container">
+            <div class="section-header"><h1>Личный кабинет</h1></div>
+           <div class="lk-wrapper">
+               <div style="min-width: 200px" class="lk-item">
+                   <a href="{% url 'orders' %}">
+                        <img src="{% static 'images/lk_icon1.png' %}" alt="">
+                        <p>МОИ ЗАКАЗЫ</p>
+                   </a>
+
+               </div>
+                <div style="min-width: 200px" class="lk-item">
+                    <a href="{% url 'account_edit' %}">
+                        <img src="{%  static 'images/lk_icon2.png' %}" alt="">
+                   <p>ЛИЧНЫЕ ДАННЫЕ</p>
+                    </a>
+
+               </div>
+                <div style="min-width: 200px" class="lk-item">
+                    <a href="{% url 'wishlist' %}">
+                       <img src="{%  static 'images/lk_icon3.png' %}" alt="">
+                   <p>ИЗБРАННОЕ</p>
+                    </a>
+
+               </div>
+           </div>
+        </div>
+    </section>
+
+</div>
+
+{% endblock %}
