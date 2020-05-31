@@ -932,22 +932,6 @@ a {
   box-sizing: border-box;
 }
 
-.offer-banner::before {
-  position: absolute;
-  content: url(../images/offer_cat.png);
-  bottom: 60px;
-  right: 80px;
-  z-index: 1;
-}
-
-.offer-banner::after {
-  position: absolute;
-  content: url(../images/offer_bg.png);
-  bottom: -4px;
-  right: 0;
-  z-index: 0;
-}
-
 .features {
   margin-bottom: 60px;
 }
@@ -1935,6 +1919,7 @@ a {
 }
 
 .modal-header {
+  position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1962,13 +1947,13 @@ a {
 }
 
 .close {
-  float: right;
+  position: absolute;
+  right: 20px;
   font-family: sans-serif;
   font-size: 24px;
   font-weight: 700;
   line-height: 1;
-  color: #000;
-  text-shadow: 0 1px 0 #fff;
+  color: #ffffff;
   opacity: .5;
   text-decoration: none;
 }
@@ -1980,10 +1965,9 @@ a {
 
 .close:focus,
 .close:hover {
-  color: #000;
   text-decoration: none;
   cursor: pointer;
-  opacity: .75;
+  opacity: 1;
 }
 
 .modal-body form {
@@ -2119,21 +2103,6 @@ a {
 
   .offer-banner {
     padding: 80px 50px;
-  }
-
-  .offer-banner::before {
-    content: url(../images/offer_cat_md.png);
-  }
-
-  .offer-banner::after {
-    position: absolute;
-    background-image: url(../images/offer_bg.png);
-    background-repeat: no-repeat;
-    right: 0;
-    bottom: 0px;
-    content: '';
-    width: 598px;
-    height: 253px;
   }
 
   .catalog-wrapper {
@@ -2417,18 +2386,6 @@ a {
     left: 0;
     right: 0;
     margin: 0 auto;
-  }
-
-  .offer-banner::before {
-    content: url(../images/offer_cat_sm.png);
-    bottom: 130px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-  }
-
-  .offer-banner::after {
-    width: 100%;
   }
 }
 

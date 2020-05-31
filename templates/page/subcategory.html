@@ -22,7 +22,7 @@
                     <div class="catalog-filters block-w-r4">
                         <ul>
                             {% if param_filter %}
-                                <li><a href="javascript:void(0);" onclick="del_filter();return false;"   >УБРАТЬ ФИЛЬТРЫ</a></li>
+                                <li><a style="color: red" href="javascript:void(0);" onclick="del_filter();return false;"   >УБРАТЬ ФИЛЬТРЫ</a></li>
                             {% endif %}
                             <li><a href="javascript:void(0);" onclick="filter('{{ 'new' }}',{{ subcat.id }});return false;"  >НОВИНКИ</a></li>
                             {% for filter in subcat.filter_set.all %}
@@ -39,13 +39,21 @@
                             </div>
                             <div class="catalog-items__filters-right">
                                 <div class="dropdown">
-                                    <button onclick="customDropDown(this)" data-target="category" class="dropbtn">Выберите</button>
+                                    <button onclick="customDropDown(this)" data-target="category" class="dropbtn">
+                                        {% if param_order == '-created_at' %}НОВИЗНЕ{% endif %}
+                                        {% if param_order == 'name' %}А - Я{% endif %}
+                                        {% if param_order == '-name' %}Я - A{% endif %}
+                                        {% if param_order == 'price' %}Цене &#8593;{% endif %}
+                                        {% if param_order == '-price' %}Цене &#8595;{% endif %}
+                                        {% if param_order == '-discount' %}скидке{% endif %}
+
+                                    </button>
                                     <div id="category" class="dropdown-content">
                                         <a {% if param_order == '-created_at' %}class="active"{% endif %} onclick="order('-created_at',{{ subcat.id }});return false;">НОВИЗНЕ</a>
                                         <a {% if param_order == 'name' %}class="active"{% endif %} onclick="order('name',{{ subcat.id }});return false;">А - Я</a>
                                         <a {% if param_order == '-name' %}class="active"{% endif %} onclick="order('-name',{{ subcat.id }});return false;">Я - А</a>
-                                        <a {% if param_order == 'price' %}class="active"{% endif %} onclick="order('price',{{ subcat.id }});return false;">Цене <i class="fa fa-arrow-up" aria-hidden="true"></i></a>
-                                        <a {% if param_order == '-price' %}class="active"{% endif %} onclick="order('-price',{{ subcat.id }});return false;">Цене <i class="fa fa-arrow-down" aria-hidden="true"></i></a>
+                                        <a {% if param_order == 'price' %}class="active"{% endif %} onclick="order('price',{{ subcat.id }});return false;">Цене &#8593;</a>
+                                        <a {% if param_order == '-price' %}class="active"{% endif %} onclick="order('-price',{{ subcat.id }});return false;">Цене &#8595;</a>
                                         <a {% if param_order == '-discount' %}class="active"{% endif %} onclick="order('-discount',{{ subcat.id }});return false;">скидке</a>
                                     </div>
                                 </div>
@@ -59,7 +67,7 @@
                                     {% if item.is_new %}
                                         <span class="catalog-item__is-new">новинка</span>
                                     {% endif %}
-                                     <span data-id="{{ item.id }}" style="cursor: pointer" class="catalog-item__in-fav  {% if item.id in wishlist_ids %} item-in-fav {% endif %} " @click="addInFav"></span>
+                                    <span data-id="{{ item.id }}" style="cursor: pointer" class="catalog-item__in-fav  {% if item.id in wishlist_ids %} item-in-fav {% endif %} " @click="addInFav"></span>
                                     <a href="{% url 'item_page' item.name_slug %}" class="">
                                         <img class="catalog-item__image" src="{{ item.getfirstimage }}" alt="">
                                         <p class="catalog-item__article">АРТИКУЛ : {{ item.article }}</p>
@@ -76,13 +84,12 @@
                             {% endfor %}
 
                         </div>
-                        <nav id="items_paginator" class="shop-pagination" aria-label="Shop navigation">
+                        <nav style="margin-bottom: 30px" id="items_paginator" class="shop-pagination" aria-label="Shop navigation">
                             <ul class="pagination justify-content-end">
                                 {% if items.has_previous %}
                                     <li class="page-item">
                                         <a class="page-link" href="?{% if param_search %}&search={{ param_search }}{% endif %}{% if param_filter %}&filter={{ param_filter }}{% endif %}{% if param_order %}&order={{ param_order }}{% endif %}{% if param_count %}&count={{ param_count }}{% endif %}" aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
-
                                         </a>
                                     </li>
                                 {% endif %}
@@ -102,6 +109,11 @@
                                 {% endif %}
                             </ul>
                         </nav>
+                        {% if seoText %}
+                            {{ seoText | safe }}
+                        {% else %}
+                            {{ subcat.description|safe }}
+                        {% endif %}
 
                     </div>
 
