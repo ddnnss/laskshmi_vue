@@ -72,6 +72,7 @@ var app = new Vue({
         loginModal:false,
         menuOpen:false,
         registerModal:false,
+        mobileSubMenu: false,
         headerCartItems: [
         ]
     },
@@ -82,6 +83,14 @@ var app = new Vue({
               this.menuOpen = false
           }else {
               this.menuOpen = true
+          }
+
+        },
+         openMobileSubMenu:function(){
+          if (this.mobileSubMenu){
+              this.mobileSubMenu = false
+          }else {
+              this.mobileSubMenu = true
           }
 
         },

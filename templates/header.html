@@ -92,13 +92,25 @@
             </div>
             <div class="mobile-menu">
                 <ul class="">
-                    <li class="nav-item nav-item__catalog "><a class="nav-item-link " href="">КАТАЛОГ ТОВАРОВ</a></li>
+                     <li class="nav-item nav-item__catalog has-sub-menu"><a class="nav-item-link " @click.prevent="openMobileSubMenu">КАТАЛОГ ТОВАРОВ</a>
+                    <div class="nav-item-submenu " :class="{navItemSubmenuActive : mobileSubMenu}">
+                        <ul class="offer-menu__wrapper">
+                                {% for category in all_cat %}
+                                <li class="offer-menu__item nav-item-submenu__item">
+                                    <img src="{{ category.get_icon }}" alt="">
+                                    <a style="text-align: start;" class="nav-item-submenu__link " href="{% url 'category' category.name_slug %}">{{ category.name }}</a>
+                                </li>
+                            {% endfor %}
+
+                    </ul>
+                    </div>
+                    </li>
                     <li class="nav-item"><a class="nav-item-link" href="/">ГЛАВНАЯ</a></li>
-                    <li class="nav-item"><a class="nav-item-link" href="">АКЦИИ</a></li>
-                    <li class="nav-item"><a class="nav-item-link" href="">НОВИНКИ</a></li>
-                    <li class="nav-item"><a class="nav-item-link" href="">О НАС</a></li>
-                     <li class="nav-item"><a class="nav-item-link" href="{% url 'dostavka' %}">ДОСТАВКА</a></li>
-                    <li class="nav-item"><a class="nav-item-link" href="{% url 'contacts' %}">КОНТАКТЫ</a></li>
+                    <li class="nav-item"><a class="nav-item-link {{ actionActive }}" href="{% url 'actions' %}">АКЦИИ</a></li>
+                    <li class="nav-item"><a class="nav-item-link {{ newActive }}" href="{% url 'new' %}">НОВИНКИ</a></li>
+                    <li class="nav-item"><a class="nav-item-link {{ aboutActive }}" href="{% url 'about_us' %}">О НАС</a></li>
+                    <li class="nav-item"><a class="nav-item-link {{ dostavkaActive }}" href="{% url 'dostavka' %}">ДОСТАВКА</a></li>
+                    <li class="nav-item"><a class="nav-item-link {{ contactsActive }}" href="{% url 'contacts' %}">КОНТАКТЫ</a></li>
                 </ul>
             </div>
         </div>
