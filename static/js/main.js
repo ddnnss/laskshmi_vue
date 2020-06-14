@@ -73,6 +73,7 @@ var app = new Vue({
         menuOpen:false,
         registerModal:false,
         mobileSubMenu: false,
+        searchBox: false,
         headerCartItems: [
         ]
     },

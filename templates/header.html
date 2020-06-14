@@ -27,7 +27,13 @@
                 </div>
             </div>
             <div class="header-top-icons header-top-icons-md-hide  d-flex-center-between">
-                <span class="header-top-icons__search"></span>
+             <div v-on:mouseleave="searchBox = false" v-bind:class="{ searchBoxActive: searchBox }" class="search-box ">
+                   <form action="{% url 'search' %}" method="get">
+                        <input autocomplete="off" placeholder="Введите часть названия товара или артикул..." name="search" type="text" class="form-control">
+                         <button class="header-top-icons__search"></button>
+                    </form>
+                </div>
+                <span  v-on:click="searchBox = true" class="header-top-icons__search"></span>
                 {% if not request.user.is_authenticated %}
                     <span v-on:click="openModal('log')" class="header-top-icons__login"></span>
                     {% else %}
