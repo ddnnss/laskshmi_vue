@@ -48,6 +48,22 @@
             display: block;
             width: 100%;
         }
+        .checkout-wrapper{
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-gap: 30px
+        }
+
+        @media (max-width: 768px){
+            .checkout-wrapper{
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 30px
+        }
+            .cart-total{
+                order: 1;
+            }
+        }
     </style>
 </head>
 <body>

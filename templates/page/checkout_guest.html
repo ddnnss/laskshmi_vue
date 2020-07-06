@@ -14,7 +14,7 @@
     <section class="lk-profile">
         <div class="container">
             <div class="section-header"><h1>Оформление заказа</h1></div>
-            <div style="display: grid;grid-template-columns: 2fr 1fr; grid-gap: 30px" class="">
+            <div   class="checkout-wrapper">
                 <div class="profile block-w-r4">
                     <p class="text-bold mb-30">ЗАПОЛНЕНИЕ ВСЕХ ПОЛЕЙ ОБЯЗАТЕЛЬНО ДЛЯ ФОРМИРОВАНИЯ ЗАКАЗА.</p>
                     <form class="lk-profile-form"  action="{% url 'checkout' %}" method="post">{% csrf_token %}

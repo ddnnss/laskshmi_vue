@@ -17,16 +17,14 @@
                     </div>
                     <div style="min-width: 100%" class="">
                         <div class="offer-slider">
-                            <div class=" offer-banner block-w-r4" style="background: url(http://placehold.it/1920x800) center; height: 550px">
-                                <h1>Фэн-Шуй товары</h1>
-                                <p>Фэн-Шуй товары для всех благ и внутренней гармонии!</p>
-                                <a class="btn" href="#">в каталог</a>
+                            {% for banner in banners %}
+                            <div class=" offer-banner block-w-r4" style="background: url({{ banner.image.url }}) center; height: 550px">
+                                <h2>{{ banner.title }}</h2>
+                                <p>{{ banner.subtitle }}</p>
+                                <a class="btn" href="{{ banner.url }}">в каталог</a>
                             </div>
-                            <div class=" offer-banner block-w-r4" style="background: url(http://placehold.it/1920x800) center; height: 550px">
-                                <h1>Фэн-Шуй товары</h1>
-                                <p>Фэн-Шуй товары для всех благ и внутренней гармонии!</p>
-                                <a class="btn" href="#">в каталог</a>
-                            </div>
+                            {% endfor %}
+
                         </div>
 
                     </div>
@@ -108,7 +106,7 @@
                     <div class="glide__track" data-glide-el="track">
                         <div class="glide__slides">
                             {% for category in all_cat %}
-                                <div class="glide__slide index-catalog-slider__item block-w-r4" >
+                                <div onclick="window.location.href='{% url 'category' category.name_slug %} '" class="glide__slide index-catalog-slider__item block-w-r4" >
                                     <img class="mb-30" src="{{ category.get_icon }}" alt="">
                                     <p class="text-bold mb-20">{{ category.name }}</p>
                                     <p>{{ category.short_description }}</p>

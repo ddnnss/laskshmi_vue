@@ -158,7 +158,8 @@ body {
 }
 
 h1,
-h3 {
+h3,
+h2 {
   font: 35px 'Museo Sans Cyrl 500', sans-serif;
   color: #6E62CA;
 }
@@ -990,7 +991,7 @@ a {
   padding: 100px 0 0 80px;
 }
 
-.offer-banner h1 {
+.offer-banner h2 {
   margin-bottom: 20px;
 }
 
@@ -1664,6 +1665,7 @@ a {
   align-items: center;
   -ms-flex-preferred-size: 360px;
   flex-basis: 360px;
+  margin-bottom: 20px;
 }
 
 .cart-items__item-name.lk-order {
@@ -2296,6 +2298,11 @@ a {
     margin-bottom: 30px;
   }
 
+  .cart-grid {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+
   .cart-wrapper {
     grid-template-columns: 1fr;
   }
@@ -2331,12 +2338,8 @@ a {
     width: 33%;
   }
 
-  .cart-items {
-    overflow-x: auto;
-  }
-
-  .cart-items__item {
-    min-width: 750px;
+  .cart-header-wrapper {
+    display: none;
   }
 }
 
@@ -2460,6 +2463,26 @@ a {
     left: 0;
     right: 0;
     margin: 0 auto;
+  }
+}
+
+@media (max-width: 500px) {
+  .header-cart {
+    width: 300px;
+  }
+
+  .header-cart-bottom {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+
+  .header-cart-bottom .btn-outline {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .header-cart-bottom .btn {
+    width: 100%;
   }
 }
 
