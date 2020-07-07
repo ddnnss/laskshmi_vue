@@ -33,7 +33,8 @@ urlpatterns = [
     path('check_email/', views.check_email, name='check_email'),
     path('order/<order_code>', views.order, name='order'),
     path('robots.txt', views.robots, name='robots'),
-    path('sitemap.xml', views.sitemap, name='sitemap')
+    path('sitemap.xml', views.sitemap, name='sitemap'),
+    path('test', views.test, name='test')
 
     # path('login/', views.login, name='login'),
     # path('logout/', views.logout_page, name='logout'),

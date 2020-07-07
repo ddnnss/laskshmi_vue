@@ -665,3 +665,6 @@ def search(request):
     return render(request, 'page/search.html', locals())
 
 
+def test(request):
+    print(request.GET)
+    print(request.POST)
