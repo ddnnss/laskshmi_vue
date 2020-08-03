@@ -6,6 +6,7 @@ class Banner(models.Model):
     title = models.CharField('Заголовок', max_length=255, blank=True)
     subtitle = models.CharField('Описание', max_length=255, blank=True)
     url = models.CharField('Ссылка', max_length=255, blank=True)
+    btn_text = models.CharField('Текст на кнопке', max_length=255, blank=True)
     is_active = models.BooleanField(default=True)
 
 
