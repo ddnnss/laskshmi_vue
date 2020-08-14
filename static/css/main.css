@@ -1055,15 +1055,24 @@ a {
 }
 
 .collections-item {
+  position: relative;
   height: 150px;
   border-radius: 4px;
   padding: 40px 20px;
 }
-
+.collections-item ::after{
+  position: absolute;
+  content: url("../images/circle_a.png");
+  bottom: 15px;
+  left: 20px;
+}
 .collections-item p {
-  max-width: 140px;
+  /*max-width: 140px;*/
   color: #ffffff;
   line-height: 24px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .index-catalog {
