@@ -59,6 +59,34 @@
 
 
         </section>
+    <section>
+        <div class="container">
+             <div class="section-header">
+                    <h4 >Все для Фэн-Шуй</h4>
+                    <div class="hr"></div>
+                </div>
+             <div class="all-for-shui">
+
+                     <p> <a href="{% url 'stars' stars.first.name_slug %}">ЗАЩИТНЫЕ АМУЛЕТЫ И ФИГУРЫ ОТ ЛЕТЯЩИХ ЗВЕЗД В 2020 ГОДУ</a></p>
+                     <img src="{% static 'images/cir_arr.png' %}" alt="">
+             </div>
+        {% if special_collections %}
+            <div class="index-catalog-slider_1">
+                    <div class="glide__track" data-glide-el="track">
+                        <div class="glide__slides">
+                            {% for collection in special_collections %}
+                                <div  class="glide__slide index-catalog-slider__item block-w-r4" >
+                                    <img class="mb-30" src="{{ collection.get_icon }}" alt="">
+                                    <p class="text-bold mb-20" onclick="window.location.href='{% url 'collection' collection.name_slug %}'">{{ collection.name }}</p>
+{#                                    <p>{{ category.short_description }}</p>#}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+        {% endif %}
+        </div>
+    </section>
         <section class="collections">
             <div class="container">
                 <div class="section-header">
@@ -106,10 +134,10 @@
                     <div class="glide__track" data-glide-el="track">
                         <div class="glide__slides">
                             {% for category in all_cat %}
-                                <div onclick="window.location.href='{% url 'category' category.name_slug %} '" class="glide__slide index-catalog-slider__item block-w-r4" >
+                                <div  class="glide__slide index-catalog-slider__item block-w-r4" >
                                     <img class="mb-30" src="{{ category.get_icon }}" alt="">
-                                    <p class="text-bold mb-20">{{ category.name }}</p>
-                                    <p>{{ category.short_description }}</p>
+                                    <p class="text-bold mb-20" onclick="window.location.href='{% url 'category' category.name_slug %} '">{{ category.name }}</p>
+                                    <p onclick="window.location.href='{% url 'category' category.name_slug %} '">{{ category.short_description }}</p>
                                 </div>
                             {% endfor %}
                         </div>
@@ -140,6 +168,21 @@
             }
         })
 
+         var glide1 = new Glide('.index-catalog-slider_1', {
+            type: 'carousel',
+            perView: 5,
+            focusAt: 'center',
+            breakpoints: {
+                800: {
+                    perView: 2,
+                    focusAt: 0,
+                },
+                480: {
+                    perView: 1
+                }
+            }
+        })
+
         var slider1 = tns({
             container: '.offer-slider',
             items: 1,
@@ -151,6 +194,7 @@
         });
 
         glide.mount()
+        glide1.mount()
 
     </script>
 {% endblock %}

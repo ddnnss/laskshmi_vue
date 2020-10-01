@@ -1,0 +1,176 @@
+
+{% extends 'basic.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="main">
+        <div class="container">
+            <div class="breadcrumbs">
+                <ul>
+                    <li><a href="/">Главная</a></li>
+                    <li>{{ star.name.upper }}</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <section class="catalog">
+            <div class="container">
+                <div class="catalog-wrapper">
+
+                    <div class="catalog-filters block-w-r4">
+                        <ul>
+
+                           {% for star in all_stars %}
+                                <li>  <a {% if star.name_slug == cur_star %} class="filter-active" {% endif %}  href="{% url 'stars' star.name_slug %}"  >{{ star.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="catalog-items">
+                        <div class="catalog-items__filters block-w-r4 d-flex-center-between">
+                            <div class="catalog-items__filters-left d-flex-center-between">
+                                <span class="catalog-items__filters-button btn">Фильтры</span>
+                                <p class="catalog-items__filters-label">В категории {{ items_count }} товаров</p>
+                                <p class="catalog-items__filters-sort-label">Сортировать по:</p>
+                            </div>
+                            <div class="catalog-items__filters-right">
+                                <div class="dropdown">
+                                    <button onclick="customDropDown(this)" data-target="category" class="dropbtn">
+                                        {% if param_order == '-created_at' %}НОВИЗНЕ{% endif %}
+                                        {% if param_order == 'name' %}А - Я{% endif %}
+                                        {% if param_order == '-name' %}Я - A{% endif %}
+                                        {% if param_order == 'price' %}Цене &#8593;{% endif %}
+                                        {% if param_order == '-price' %}Цене &#8595;{% endif %}
+                                        {% if param_order == '-discount' %}скидке{% endif %}
+
+                                    </button>
+                                    <div id="category" class="dropdown-content">
+                                        <a {% if param_order == '-created_at' %}class="active"{% endif %} onclick="order('-created_at',{{ subcat.id }});return false;">НОВИЗНЕ</a>
+                                        <a {% if param_order == 'name' %}class="active"{% endif %} onclick="order('name',{{ subcat.id }});return false;">А - Я</a>
+                                        <a {% if param_order == '-name' %}class="active"{% endif %} onclick="order('-name',{{ subcat.id }});return false;">Я - А</a>
+                                        <a {% if param_order == 'price' %}class="active"{% endif %} onclick="order('price',{{ subcat.id }});return false;">Цене &#8593;</a>
+                                        <a {% if param_order == '-price' %}class="active"{% endif %} onclick="order('-price',{{ subcat.id }});return false;">Цене &#8595;</a>
+                                        <a {% if param_order == '-discount' %}class="active"{% endif %} onclick="order('-discount',{{ subcat.id }});return false;">скидке</a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="catalog-items__inner">
+                            {% for item in items %}
+                                <div class="catalog-item block-w-r4">
+                                    {% if item.is_new %}
+                                        <span class="catalog-item__is-new">новинка</span>
+                                    {% endif %}
+                                    <span data-id="{{ item.id }}" style="cursor: pointer" class="catalog-item__in-fav  {% if item.id in wishlist_ids %} item-in-fav {% endif %} " @click="addInFav"></span>
+                                    <a href="{% url 'item_page' item.name_slug %}" class="">
+                                        <img class="catalog-item__image" src="{{ item.getfirstimage }}" alt="">
+                                        <p class="catalog-item__article">АРТИКУЛ : {{ item.article }}</p>
+                                        <p class="catalog-item__description">{{ item.name }}</p>
+                                    </a>
+                                    <div class="catalog-item-bottom ">
+                                        <p class="catalog-item__price">{{ item.discount_value }}Р</p>
+                                        <div class="catalog-item-bottom__in-cart">
+                                            <input class="form-control" type="number" value="1" onkeyup="document.getElementById('add_btn_{{ item.id }}').dataset.num = this.value">
+                                            <span id="add_btn_{{ item.id }}" data-id="{{ item.id }}" data-num="1" data-name="{{ item.name }}" data-price="{{ item.discount_value }}" data-image="{{ item.itemimage_set.first.image_small }}" @click="addItem"  ></span>
+                                        </div>
+                                    </div>
+                                </div><!--//catalog-item -->
+                            {% endfor %}
+
+                        </div>
+                        <nav style="margin-bottom: 30px" id="items_paginator" class="shop-pagination" aria-label="Shop navigation">
+                            <ul class="pagination justify-content-end">
+                                {% if items.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?{% if param_search %}&search={{ param_search }}{% endif %}{% if param_filter %}&filter={{ param_filter }}{% endif %}{% if param_order %}&order={{ param_order }}{% endif %}{% if param_count %}&count={{ param_count }}{% endif %}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% for pg in items.paginator.page_range %}
+                                    {% if items.number == pg %}
+                                        <li class="page-item active"><a class="page-link" href="?{% if pg > 1 %}page={{ pg }}{% endif %}{% if param_search %}&search={{ param_search }}{% endif %}{% if param_filter %}&filter={{ param_filter }}{% endif %}{% if param_order %}&order={{ param_order }}{% endif %}{% if param_count %}&count={{ param_count }}{% endif %}">{{pg}}</a></li>
+                                    {% elif pg > items.number|add:'-6' and pg < items.number|add:'6' %}
+                                        <li class="page-item"><a class="page-link" href="?{% if pg > 1 %}page={{ pg }}{% endif %}{% if param_search %}&search={{ param_search }}{% endif %}{% if param_filter %}&filter={{ param_filter }}{% endif %}{% if param_order %}&order={{ param_order }}{% endif %}{% if param_count %}&count={{ param_count }}{% endif %}">{{pg}}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if items.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ items.paginator.num_pages }}{% if param_search %}&search={{ param_search }}{% endif %}{% if param_filter %}&filter={{ param_filter }}{% endif %}{% if param_order %}&order={{ param_order }}{% endif %}{% if param_count %}&count={{ param_count }}{% endif %}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% if seoText %}
+                            {{ seoText | safe }}
+                        {% else %}
+                            {{ subcat.description|safe }}
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script>
+        let last_open=''
+        let filter_button = document.getElementsByClassName('catalog-items__filters-button')[0]
+        let filter_menu = document.getElementsByClassName('catalog-filters')[0]
+
+        filter_button.onclick = function () {
+
+
+            filter_menu.classList.toggle('filters-active')
+        }
+        function customDropDown(el) {
+
+            let target = el.dataset.target
+            if (last_open !=''){
+                if (last_open === target){
+                    document.getElementById(target).classList.toggle("show");
+                    last_open=target
+                }else{
+                    document.getElementById(last_open).classList.remove("show");
+                    document.getElementById(target).classList.toggle("show");
+                    last_open=target
+                }
+
+
+            }else{
+
+                document.getElementById(target).classList.toggle("show");
+                last_open=target
+            }
+
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
+{% endblock %}

@@ -1088,6 +1088,12 @@ a {
   cursor: ew-resize;
 }
 
+.index-catalog-slider__item img{
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
 .about {
   margin-bottom: 60px;
 }
@@ -2579,4 +2585,24 @@ a {
   .footer:last-child {
     margin-bottom: 0;
   }
+}
+
+.all-for-shui{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #776BD3;
+  border-radius: 4px;
+  padding: 15px 15px 15px 70px;
+  margin-bottom: 50px;
+
+}
+.all-for-shui p a{
+  font: 13px 'Museo Sans Cyrl 500',sans-serif;
+  font-weight: bold;
+  letter-spacing: 0.09em;
+  color: #ffffff;
+}
+.index-catalog-slider_1{
+  margin-bottom: 40px;
 }

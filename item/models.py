@@ -101,6 +101,22 @@ class Filter(models.Model):
         verbose_name = "Фильтр"
         verbose_name_plural = "Фильтры"
 
+class Star(models.Model):
+    name = models.CharField('Название звезды', max_length=255, blank=False, null=True)
+    name_slug = models.CharField(max_length=255, blank=True, null=True)
+    seoText = RichTextUploadingField('Текст для СЕО', blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.name_slug = slugify(self.name)
+        super(Star, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f'Звезда {self.name} '
+
+    class Meta:
+        verbose_name = "Звезда"
+        verbose_name_plural = "Звезды"
+
 class Collection(models.Model):
     category = models.ForeignKey(Category, blank=False, null=True, on_delete=models.SET_NULL, verbose_name='Категория')
     name = models.CharField('Название коллекции', max_length=255, blank=False, null=True)
@@ -117,6 +133,7 @@ class Collection(models.Model):
     show_at_category = models.BooleanField('Отображать в категории', default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_special = models.BooleanField('Спец. коллекция', default=False)
 
     def save(self, *args, **kwargs):
         self.name_slug = slugify(self.name)
@@ -125,6 +142,12 @@ class Collection(models.Model):
             item.discount = self.discount
             item.save()
         super(Collection, self).save(*args, **kwargs)
+
+    def get_icon(self):
+        if self.icon:
+            return self.icon.url
+        else:
+            return 'https://placehold.it/40'
 
     def __str__(self):
         return '%s ' % self.name
@@ -136,6 +159,7 @@ class Collection(models.Model):
 class Item(models.Model):
     collection = models.ManyToManyField(Collection, blank=True, verbose_name='Коллекция',db_index=True)
     filter = models.ForeignKey(Filter, blank=True, null=True, on_delete=models.SET_NULL,db_index=True)
+    star = models.ForeignKey(Star, blank=True, null=True, on_delete=models.SET_NULL,db_index=True)
     subcategory = models.ForeignKey(SubCategory, blank=False, null=True, verbose_name='Подкатегория', on_delete=models.SET_NULL,db_index=True)
     name = models.CharField('Название товара', max_length=255, blank=False, null=True)
     name_lower = models.CharField(max_length=255, blank=True, null=True,default='')
