@@ -670,6 +670,111 @@ def test(request):
     print(request.GET)
     print(request.POST)
 
+def stars_all(request):
+    try:
+        is_all_stars = True
+        all_stars = Star.objects.all()
+
+        all_items = Item.objects.filter(star__isnull=False, is_active=True, is_present=True).order_by('-created_at')
+        np_all_items = Item.objects.filter(star__isnull=False, is_active=True, is_present=False)
+
+    except:
+        raise Http404
+        # return render(request, '404.html', locals())
+    data = request.GET
+    print(request.GET)
+    items_count = all_items.count() + np_all_items.count()
+    search = data.get('search')
+    filter = data.get('filter')
+    order = data.get('order')
+    count = data.get('count')
+    page = request.GET.get('page')
+    search_qs = None
+    filter_sq = None
+    np_search_qs = None
+    np_filter_sq = None
+    if search:
+        items = all_items.filter(name_lower__contains=search.lower())
+        not_present = np_all_items.filter(name_lower__contains=search.lower())
+
+        if not items:
+            items = all_items.filter(article__contains=search)
+            not_present = np_all_items.filter(article__contains=search)
+        search_qs = items
+        np_search_qs = not_present
+        param_search = search
+
+    if filter == 'new':
+        print('Поиск по фильтру туц')
+        if search_qs:
+            items = search_qs.filter(is_new=True)
+            not_present = np_search_qs.filter(is_new=True)
+            filter_sq = items
+            np_filter_sq = not_present
+            param_filter = filter
+        else:
+            items = all_items.filter(is_new=True)
+            not_present = np_all_items.filter(is_new=True)
+            filter_sq = items
+            np_filter_sq = not_present
+            param_filter = filter
+
+        param_filter = 'new'
+
+    if filter and filter != 'new':
+        print('Поиск по фильтру')
+
+        if search_qs:
+            items = search_qs.filter(filter__name_slug=filter)
+            not_present = np_search_qs.filter(filter__name_slug=filter)
+            filter_sq = items
+            np_filter_sq = not_present
+            param_filter = filter
+        else:
+            items = all_items.filter(filter__name_slug=filter)
+            not_present = np_all_items.filter(filter__name_slug=filter)
+            currentFilter = Filter.objects.get(name_slug=filter)
+            seoText = currentFilter.seoText
+            filter_sq = items
+            np_filter_sq = not_present
+            param_filter = filter
+
+    if order:
+        if search_qs and filter_sq:
+            items = filter_sq.order_by(order)
+        elif filter_sq:
+            items = filter_sq.order_by(order)
+        elif search_qs:
+            items = search_qs.order_by(order)
+        else:
+            items = all_items.order_by(order)
+        param_order = order
+
+    if not search and not order and not filter:
+        items = all_items
+        not_present = np_all_items
+        # subcat.views = subcat.views + 1
+        # subcat.save()
+        param_order = '-created_at'
+
+    if count:
+        items_paginator = Paginator(items, int(count))
+        param_count = count
+    else:
+        items_paginator = Paginator(items, 12)
+
+
+
+    try:
+        items = items_paginator.get_page(page)
+        show_tags = False
+    except PageNotAnInteger:
+        items = items_paginator.page(1)
+    except EmptyPage:
+        items = items_paginator.page(items_paginator.num_pages)
+
+    return render(request, 'page/stars.html', locals())
+
 def stars(request, subcat_slug):
     try:
         cur_star = subcat_slug

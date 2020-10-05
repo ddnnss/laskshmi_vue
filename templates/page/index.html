@@ -67,23 +67,24 @@
                 </div>
              <div class="all-for-shui">
 
-                     <p> <a href="{% url 'stars' stars.first.name_slug %}">ЗАЩИТНЫЕ АМУЛЕТЫ И ФИГУРЫ ОТ ЛЕТЯЩИХ ЗВЕЗД В 2020 ГОДУ</a></p>
-                     <img src="{% static 'images/cir_arr.png' %}" alt="">
+                     <p> <a href="{% url 'stars_all'%}">ЗАЩИТНЫЕ АМУЛЕТЫ И ФИГУРЫ ОТ ЛЕТЯЩИХ ЗВЕЗД В 2020 ГОДУ</a></p>
+                 <a href="{% url 'stars_all'%}"><img src="{% static 'images/cir_arr.png' %}" alt=""></a>
              </div>
         {% if special_collections %}
-            <div class="index-catalog-slider_1">
-                    <div class="glide__track" data-glide-el="track">
-                        <div class="glide__slides">
-                            {% for collection in special_collections %}
-                                <div  class="glide__slide index-catalog-slider__item block-w-r4" >
+
+            <div class="special-collections">
+           {% for collection in special_collections %}
+               <a href="{% url 'collection' collection.name_slug %}">
+                     <div  class="block-w-r4" >
                                     <img class="mb-30" src="{{ collection.get_icon }}" alt="">
-                                    <p class="text-bold mb-20" onclick="window.location.href='{% url 'collection' collection.name_slug %}'">{{ collection.name }}</p>
+                                    <p class="text-bold mb-20" >{{ collection.name }}</p>
 {#                                    <p>{{ category.short_description }}</p>#}
                                 </div>
+               </a>
+
                             {% endfor %}
-                        </div>
-                    </div>
-                </div>
+            </div>
+
         {% endif %}
         </div>
     </section>

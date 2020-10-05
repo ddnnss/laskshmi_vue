@@ -1070,9 +1070,10 @@ a {
   /*max-width: 140px;*/
   color: #ffffff;
   line-height: 24px;
-  font-size: 14px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  max-width: 140px;
 }
 
 .index-catalog {
@@ -2604,5 +2605,12 @@ a {
   color: #ffffff;
 }
 .index-catalog-slider_1{
+  margin-bottom: 40px;
+}
+
+.special-collections{
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
+  grid-gap: 20px;
   margin-bottom: 40px;
 }

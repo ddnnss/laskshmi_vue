@@ -63,7 +63,13 @@
 
                     <div class="item-info block-w-r4">
                         <h1>{{ item.name }}</h1>
-                        <p class="item-info__article">АРТИКУЛ : {{ item.article }}</p>
+
+                    {% if item.star %}
+                         <p class="item-info__article">АРТИКУЛ : {{ item.article }}<br>
+                             ОТ : {{ item.star.name}}</p>
+                        {% else %}
+                          <p class="item-info__article">АРТИКУЛ : {{ item.article }}</p>
+                    {% endif %}
                         <p class="item-info__price">{{ item.discount_value }}Р</p>
                         <p class="item-info__description">{{ item.description|safe }}</p>
                         <div class="item-info-buttons d-flex-center-between">

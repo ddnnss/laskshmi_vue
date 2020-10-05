@@ -22,6 +22,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('category/<cat_slug>/', views.category, name='category'),
     path('subcategory/<subcat_slug>/', views.subcategory, name='subcategory'),
+    path('stars/', views.stars_all, name='stars_all'),
     path('stars/<subcat_slug>/', views.stars, name='stars'),
     path('collection/<collection_slug>/', views.collection, name='collection'),
     path('search/', views.search, name='search'),
